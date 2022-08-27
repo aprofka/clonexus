@@ -20,4 +20,4 @@ So, this should work with standard bots and self-bots, but keep in mind that sel
 
 ## LICENSE
 
-[GNU](LICENSE)
+[GPL](LICENSE)

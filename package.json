@@ -1,0 +1,27 @@
+{
+  "name": "clonexus",
+  "version": "0.0.5",
+  "description": "Discord messaging forwarding/cloning bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aprofka/clonexus.git"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "Aleksandros Profka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aprofka/clonexus/issues"
+  },
+  "homepage": "https://github.com/aprofka/clonexus#readme",
+  "dependencies": {
+    "discord.js": "github:nikita/discord.js",
+    "winston": "^3.8.1"
+  }
+}

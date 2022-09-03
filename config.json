@@ -1,4 +1,3 @@
 {
-  "channelIds": ["11111111111","2222222222222"],
-  "token": "YOUR-DISCORD-TOKEN"
+  "token": "YOUR_DISCORD_TOKEN"
 }

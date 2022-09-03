@@ -9,16 +9,14 @@ const config = require("./config.json");
 const discord = require("discord.js");
 const client = new discord.Client();
 
-var map = {};
-//[Origin/Source Channel] -> [Target Channel, tagType]
-// TagTypes: 0 - No tag, 1 - @here tag , 2 - @everyone tag
-map["11111111111111111"] = ["5435435345435345435","2"]; // channel 1
-map["22222222222222222"] = ["5454545454545454545","2"]; // channel 2
 
+var channelConfig = new Map();
 const tagType = ["", " @here", " @everyone"]
 
-async function botStart(){
+// Origin/Source Channel -> [Target Channel, tagType]
+channelConfig.set("SOURCE_CHANNEL_ID_NUMBER", ["TARGET_CHANNEL_ID_NUMBER","2"]); // flip-news-and-releases
 
+async function botStart(){
   //Sets up the logger
   const logger = winston.createLogger({
     level: "info",
@@ -43,15 +41,16 @@ async function botStart(){
   //This will run on every discord message
   client.on("messageCreate", message => {
     //This will return if the message is not from the list/array of channels to listen to
-    if (config.channelIds && config.channelIds.length > 0 && !config.channelIds.includes(message.channel.id)) { return }
+    let channelIDs = Array.from( channelConfig.keys() );
+    if ( channelIDs && channelIDs.length > 0 && !channelIDs.includes(message.channel.id)) { return }
 
     //This will log only the first 20 characters of each message
     logger.info('[' + message.author.tag + "] " + message.content.substring(0, 20) + "...");
     if(!message.system){
-      client.channels.cache.get(map[message.channel.id][0]).send({
+      client.channels.cache.get(channelConfig.get(message.channel.id)[0]).send({
         content: '[' + message.author.tag + "] \r\n" 
           + message.content 
-          + tagType[Number(map[message.channel.id][1])], 
+          + tagType[Number(channelConfig.get(message.channel.id)[1])], 
         embeds: message.embeds,
         files: Array.from(message.attachments.values()),
       });

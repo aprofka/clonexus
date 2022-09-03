@@ -14,7 +14,7 @@ var channelConfig = new Map();
 const tagType = ["", " @here", " @everyone"]
 
 // Origin/Source Channel -> [Target Channel, tagType]
-channelConfig.set("SOURCE_CHANNEL_ID_NUMBER", ["TARGET_CHANNEL_ID_NUMBER","2"]); // flip-news-and-releases
+channelConfig.set("SOURCE_CHANNEL_ID_NUMBER", ["TARGET_CHANNEL_ID_NUMBER","TAG_TYPE_NUMBER"]); // flip-news-and-releases
 
 async function botStart(){
   //Sets up the logger

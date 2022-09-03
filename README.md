@@ -6,9 +6,9 @@ So, this should work with standard bots and self-bots, but keep in mind that sel
 
 ## Instructions
 
-1. Open config.json & add your channelIds(the ones you want the bot to listen to) to the array, then set your token. 
+1. Open config.json and set your discord token. 
 
-2. Open index.js and add your source - target channels as seen in the file to the variable named "map".
+2. Open index.js and add your source - target channels as seen in the file to the variable named "channelConfig".
 
 3. Run `npm install` , `npm install github:nikita/discord.js`
 

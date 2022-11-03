@@ -1,20 +1,21 @@
 /**
  * @author Aleksandros Profka <@github.com/aprofka>
- * @description This application would forward discord messages from specified channels, from any server to any other channel in any server.
+ * @description This application would forward discord messages from specified channels, 
+ *              from any server to any other channel in any server.
  * 
  **/
 
 const winston = require("winston");
 const config = require("./config.json");
-const discord = require("discord.js");
-const client = new discord.Client();
+const { Client } = require("discord.js");
+const client = new Client();
 
-
-var channelConfig = new Map();
 const tagType = ["", " @here", " @everyone"]
 
+var channelConfig = new Map();
+
 // Origin/Source Channel -> [Target Channel, tagType]
-channelConfig.set("SOURCE_CHANNEL_ID_NUMBER", ["TARGET_CHANNEL_ID_NUMBER","TAG_TYPE_NUMBER"]); // flip-news-and-releases
+channelConfig.set("SOURCE_CHANNEL_ID_NUMBER", ["TARGET_CHANNEL_ID_NUMBER","TAG_TYPE_NUMBER"]); // channel-name
 
 async function botStart(){
   //Sets up the logger
@@ -38,24 +39,46 @@ async function botStart(){
     logger.info(`Logged in as ${client.user.tag}`);
   });
 
-  //This will run on every discord message
-  client.on("messageCreate", message => {
-    //This will return if the message is not from the list/array of channels to listen to
-    let channelIDs = Array.from( channelConfig.keys() );
-    if ( channelIDs && channelIDs.length > 0 && !channelIDs.includes(message.channel.id)) { return }
 
-    //This will log only the first 20 characters of each message
-    logger.info('[' + message.author.tag + "] " + message.content.substring(0, 20) + "...");
-    if(!message.system){
-      client.channels.cache.get(channelConfig.get(message.channel.id)[0]).send({
-        content: '[' + message.author.tag + "] \r\n" 
-          + message.content 
-          + tagType[Number(channelConfig.get(message.channel.id)[1])], 
-        embeds: message.embeds,
-        files: Array.from(message.attachments.values()),
-      });
-    }
-  });
+  try {
+    //This will run on every discord message
+    client.on("messageCreate", message => {
+      //This will return if the message is not from the list/array of channels to listen to
+      let channelIDs = Array.from( channelConfig.keys() );
+      
+        if ( channelIDs && channelIDs.length > 0 && !channelIDs.includes(message.channel.id)) { return }
+
+        if(!message.system){
+          //This will log only the first 20 characters of each message
+          logger.info('[' + message.author.tag + "] " + message.content.substring(0, 20) + "...");
+
+          /*This checks if the message has any embeds and gets the link if any.
+            You can comment this out or delete if you dont need it */
+          let sEmbedURL = "";
+          if(message.embeds.length > 0 && message.embeds[0].fields.length > 0){
+            sEmbedURL = "\r\n [Embed URL] - " + message.embeds[0].url;
+          }
+
+          /*This checks if a message contains Out of Stock and doesnt tag anyone
+            You could change this to another words or use an array/list to check for
+            multiple words */
+          let iTag = 0;
+          if(!message.content.includes("Out of Stock")){
+            iTag = Number(channelConfig.get(message.channel.id)[1]);
+          }
+          let sForwardContent = message.content + tagType[iTag] + sEmbedURL;
+
+          client.channels.cache.get(channelConfig.get(message.channel.id)[0]).send({
+            content: sForwardContent,
+            files: Array.from(message.attachments.values()),
+            embeds: message.embeds,
+          });
+
+        }
+    });
+  }catch(e) {
+    logger.error(e)
+  }
 }
 
 client.login(config.token);

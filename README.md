@@ -1,4 +1,4 @@
-# Clonexus - Messaging forwarding bot
+# Clonexus - Message forwarding bot
 
 So, this should work with standard bots and self-bots, but keep in mind that self-bots are against Discord's terms of service and are not officially supported by the newest discord modules/plugins. Self-botting could result in your account being banned, so use it with caution. 
 
